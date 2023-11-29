@@ -9,7 +9,7 @@ import math
 
 
 MODEL_CONFIG = {
-	"api_key": "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",
+	"api_key": "",
 	"LM": "gpt-3.5-turbo",
 	"temperature": 0.5,
 	"dataset": "data/GSM8K_test.jsonl",
@@ -51,26 +51,11 @@ def load_data(frn):
 			return [line for line in reader]
 
 def str2num(answer_str, rounding="int", abs_val=True):
-	'''Convert a string to a number.
-	@:param answer_str (str): The string to convert.
-	@:param rounding (str): The rounding method for the answer. Can be "int", "ceil", or "floor".
-	@:param abs_val (bool): Whether to take the absolute value of the answer.
-
-	@:return The converted number.
-	'''
 	if "/" in answer_str:
 		answer_str =  float(sum(Fraction(s) for s in answer_str.split()))
 	answer_str = float(answer_str)
 
-	if rounding == "int":
-		answer_str = int(answer_str)
-	elif rounding == "ceil":
-		answer_str = math.ceil(answer_str)
-	elif rounding == "floor":
-		answer_str = math.floor(answer_str)
-
-	if abs_val:
-		answer_str = abs(answer_str)
+	answer_str = round(answer_str)
 
 	return answer_str
 

@@ -1,5 +1,6 @@
 import re
 import os
+import time
 from io import StringIO
 import openai
 from utils import CODE_STOP_TOKEN, CODE_MAX_TOKEN, MODEL_CONFIG
@@ -70,11 +71,21 @@ class Model():
         prompt_and_example = f"{self.prompt}\n\n{templated_example}"
         stop_token = CODE_STOP_TOKEN
 
-        completion = self.query(prompt=prompt_and_example,
-            stop=[stop_token],
-            max_tokens=CODE_MAX_TOKEN,
-            temperature=self.temperature
-        )
+        counter = 0
+        while True:
+            try:
+                completion = self.query(prompt=prompt_and_example,
+                    stop=[stop_token],
+                    max_tokens=CODE_MAX_TOKEN,
+                    temperature=self.temperature
+                )
+                break
+            except:
+                if counter > 3:
+                    exit()
+                counter+=1
+                print("Sleeping for 30 seconds")
+                time.sleep(30)
 
         answer, final_completion = self.derive_answer_from_completions(completion=completion)
 

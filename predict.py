@@ -8,6 +8,26 @@ import time
 from tqdm import tqdm
 import argparse
 
+
+def predict_one(question):
+    config = MODEL_CONFIG
+    model = Model(config)
+    example = {
+        "question": question,
+        "id": 0
+    }
+    try:
+        output = model.predict(example)
+        answer = output["answer"]
+        completion = output["completion"]
+    except Exception as e:
+        answer, completion = "[error]", str(e)
+        print(f"Error at example {i}: {str(e)}", file=sys.stderr)
+    
+    return answer, completion
+
+
+
 if __name__ == "__main__":
     config = MODEL_CONFIG
 
